@@ -245,9 +245,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09258e157b0d2c84b8d7038198f1ef6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 10
-  Height: 10
+  Width: 500
+  Height: 500
   Life: {fileID: 0}
+  Densite: 4
 --- !u!212 &678401755
 SpriteRenderer:
   m_ObjectHideFlags: 0

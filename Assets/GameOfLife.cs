@@ -12,6 +12,7 @@ public class GameOfLife : MonoBehaviour
 
     public Texture2D Life;
 
+    public int Densite;
 
     int frame=0;
 
@@ -24,40 +25,41 @@ public class GameOfLife : MonoBehaviour
         
         for (int index1 = -1;index1 <=1 ;index1++)
         {
-            if (x+index1 < 0)
+            int xVoisin = x + index1;
+
+            if (xVoisin < 0)
             {
-                index1 = index1 + Width;
+                xVoisin = xVoisin + Width;
             }
-            else if (x+index1 > Width)
+            else if (xVoisin >= Width)
             {
-                index1 = index1 - Width;
+                xVoisin = xVoisin - Width;
             }
-            else
+
+            for (int index2 = -1; index2 <= 1; index2++)
             {
-                for (int index2 = -1; index2 <= 1; index2++)            
+                int yVoisin = y + index2;
+
+                if (yVoisin < 0)
                 {
-                    if (y + index2 < 0)
-                    {
-                        index2 = index2 + Height;
-                    }
-                    else if (y + index2 > Height)
-                    {
-                        index2 = index2 - Height;
-                    }
-                    else
-                    {
-                        var color = GetValue(Pixels, x + index1, y + index2);
-                        //Color[(x+index1,y+index2)]
-                        if (color == Color.black)
-                        {
-                            nbrBlack++;
-                        }
-                        else if (color == Color.white)
-                        {
-                            nbrWhite++;
-                        }
-                    }
+                    yVoisin = yVoisin + Height;
                 }
+                else if (yVoisin >= Height)
+                {
+                    yVoisin = yVoisin - Height;
+                }
+
+                var color = GetValue(Pixels, xVoisin, yVoisin);
+
+                if (color == Color.black)
+                {
+                    nbrBlack++;
+                }
+                else if (color == Color.white)
+                {
+                    nbrWhite++;
+                }
+                    
             }
 
         }
@@ -87,7 +89,7 @@ public class GameOfLife : MonoBehaviour
                 int rdmNbr = rnd.Next(0, 10);
                 //Debug.Log("Random" + rdmNbr);
 
-                if ( rdmNbr > 2)
+                if ( rdmNbr > (10-Densite))
                 {
                     SetValue(ref Pixels, x, y, Color.black);
                 }
@@ -123,12 +125,11 @@ public class GameOfLife : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         Color[] newGeneration = new Color[Width * Height];
         
-        for (int y = 0; y < Height; y++)                                                 //ICI mettre y a 0 pour les deux
+        for (int y = 0; y < Height; y++)
         {
-            for (int x = 0; x < Width; x++)                                              //ICI mettre index1 a 0 pour les deux
+            for (int x = 0; x < Width; x++)                                           
             {
                 var color = GetValue(Pixels, x , y );
 
@@ -136,6 +137,7 @@ public class GameOfLife : MonoBehaviour
 
                 if (color == Color.black)
                 {
+                    
                     var voisins = Parcourir(x, y);
                     int nbrBlack = voisins[0];
                     int nbrWhite = voisins[1];
@@ -169,7 +171,7 @@ public class GameOfLife : MonoBehaviour
         //Thread.Sleep(500);
 
         Pixels = newGeneration;
-        SetValue(ref Pixels, 0, 0, Color.red);
+        //SetValue(ref Pixels, 0, 0, Color.red);
         Life.SetPixels(Pixels);
         Life.Apply();
         SetSpriteTexture();
